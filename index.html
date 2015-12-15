@@ -18,13 +18,23 @@
 
 <body ng-app="app" ng-controller="MainCtrl" class="container">
     <div>
-        <textarea style="margin:10px;width:100%;height:400px;" ng-model="srcData"></textarea>
+        <div style="margin:20px;color:red;">
+            <h3>IMPORTANT: all data should be strictly in the form of $x.yz; <br>
+            2 decimal digits (even 0) cannot be ignored!</h3>
+        </div>
+        <form class="form" style="margin-left: 20px; margin-top:20px">
+            <label>Target Value</label>
+            <input ng-model="srcTarget" placeholder="eg $5.00">
+        </form>
+        <div class="divider" style="margin-left:20px; border:1px solid grey; height:2px;"></div>
+        <div style="margin-left:20px;color:green;">Source Data</div>
+        <textarea style="margin-left:20px;width:100%;height:400px;" ng-model="srcData" placeholder="eg $x.yz in multiple lines"></textarea>
         <div class="btnDiv">
             <button class="btn btn-primary" ng-click="submit()">submit</button>
         </div>
     </div>
     <div class="resultDiv">
-        <span style="color:blue;">RESULT</span>
+        <span style="color:blue;margin-left:20px;">RESULT</span>
         <table class="table">
             <tr ng-repeat="r in results">
                 <td>{{r}}</td>
@@ -37,7 +47,8 @@
             $scope.results = [];
             $scope.submit = function() {
                 $scope.DATA = convert($scope.srcData);
-                $scope.TARGET_SUM = 277200 + 2089975;
+                $scope.TARGET_SUM = parseInt($scope.srcTarget.replace(/[\$\.,]/g, ''));
+                // $scope.TARGET_SUM = 277200 + 2089975;
                 solve($scope);
             }
 
@@ -59,29 +70,7 @@
     function solve($scope) {
         var DATA = $scope.DATA,
             TARGET_SUM = $scope.TARGET_SUM;
-        /*var DATA = [
-            15378175,
-            1450800,
-            417497,
-            643742,
-            84379,
-            7893600,
-            277200,
-            553000,
-            2979100,
-            2089975,
-            1035250,
-            18918550,
-            1133950,
-            1271875,
-            3201050,
-            2903457,
-            252281
-        ];
-*/
-
-
-        console.log(DATA);
+        console.log(DATA, TARGET_SUM);
 
         var stack = [];
         var sumInStack = 0;
