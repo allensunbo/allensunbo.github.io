@@ -1,71 +1,124 @@
 <!DOCTYPE html>
 <html>
 
-<body>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"></link>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.0/angular.min.js"></script>
+    <style type="text/css">
+    .btnDiv {
+        text-align: center;
+    }
+    
+    .resultDiv {
+        margin-top: 20px;
+        background-color: white;
+    }
+    </style>
+</head>
+
+<body ng-app="app" ng-controller="MainCtrl" class="container">
+    <div>
+        <textarea style="margin:10px;width:100%;height:400px;" ng-model="srcData"></textarea>
+        <div class="btnDiv">
+            <button class="btn btn-primary" ng-click="submit()">submit</button>
+        </div>
+    </div>
+    <div class="resultDiv">
+        <span style="color:blue;">RESULT</span>
+        <table class="table">
+            <tr ng-repeat="r in results">
+                <td>{{r}}</td>
+            </tr>
+        </table>
+    </div>
     <script type="text/javascript">
-    var DATA = [
-        15378175,
-        1450800,
-        417497,
-        643742,
-        84379,
-        7893600,
-        277200,
-        553000,
-        2979100,
-        2089975,
-        1035250,
-        18918550,
-        1133950,
-        1271875,
-        3201050,
-        2903457,
-        252281
-    ];
-
-    DATA.sort(function(a, b) {
-        return a - b
-    });
-
-    console.log(DATA);
-
-
-
-    var TARGET_SUM = 277200 + 2089975;
-    var stack = [];
-    var sumInStack = 0;
-
-
-    populateSubset(DATA, 0, DATA.length);
-
-    document.write(stack);
-
-    function populateSubset(data, fromIndex, endIndex) {
-        if (sumInStack === TARGET_SUM) {
-            print(stack);
-        }
-
-        for (var currentIndex = fromIndex; currentIndex < endIndex; currentIndex++) {
-
-            if (sumInStack + data[currentIndex] <= TARGET_SUM) {
-                stack.push(data[currentIndex]);
-                sumInStack += data[currentIndex];
-                populateSubset(data, currentIndex + 1, endIndex);
-                sumInStack -= stack.pop();
+    angular.module('app', [])
+        .controller('MainCtrl', function($scope) {
+            $scope.results = [];
+            $scope.submit = function() {
+                $scope.DATA = convert($scope.srcData);
+                $scope.TARGET_SUM = 277200 + 2089975;
+                solve($scope);
             }
-        }
+
+        });
+
+    function convert(srcData) {
+        var dataStr = srcData.replace(/[\$\.,]/g, '').split('\n');
+        var result = [];
+        dataStr.forEach(function(v) {
+            result.push(parseInt(v));
+        });
+        result.sort(function(a, b) {
+            return a - b;
+        });
+        return result;
     }
 
 
-    function print(stack) {
-        var s = '';
-        s = TARGET_SUM + " = ";
-        console.log(stack);
-        stack.forEach(function(v) {
-            s += (v + " + ");
-        });
-        s = s.trim();
-        console.log(s.slice(0, s.length - 1));
+    function solve($scope) {
+        var DATA = $scope.DATA,
+            TARGET_SUM = $scope.TARGET_SUM;
+        /*var DATA = [
+            15378175,
+            1450800,
+            417497,
+            643742,
+            84379,
+            7893600,
+            277200,
+            553000,
+            2979100,
+            2089975,
+            1035250,
+            18918550,
+            1133950,
+            1271875,
+            3201050,
+            2903457,
+            252281
+        ];
+*/
+
+
+        console.log(DATA);
+
+        var stack = [];
+        var sumInStack = 0;
+
+        populateSubset($scope, DATA, 0, DATA.length);
+
+
+        function populateSubset($scope, data, fromIndex, endIndex) {
+            if (sumInStack === TARGET_SUM) {
+                print($scope, stack);
+            }
+
+            for (var currentIndex = fromIndex; currentIndex < endIndex; currentIndex++) {
+
+                if (sumInStack + data[currentIndex] <= TARGET_SUM) {
+                    stack.push(data[currentIndex]);
+                    sumInStack += data[currentIndex];
+                    populateSubset($scope, data, currentIndex + 1, endIndex);
+                    sumInStack -= stack.pop();
+                }
+            }
+        }
+
+
+        function print($scope, stack) {
+            var s = '';
+            s = '$' + (TARGET_SUM / 100).toFixed(2) + " = ";
+            console.log(stack);
+            stack.forEach(function(v) {
+                s += ('$' + (v / 100).toFixed(2) + " + ");
+            });
+            s = s.trim();
+            console.log(s.slice(0, s.length - 1));
+            //document.write('<div>' + s.slice(0, s.length - 1) + '</div>');
+            //document.write('<div>' + s.slice(0, s.length - 1) + '</div>');
+            $scope.results.push(s.slice(0, s.length - 1));
+        }
     }
     </script>
 </body>
