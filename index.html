@@ -3,7 +3,70 @@
 
 <body>
     <script type="text/javascript">
-    document.write("hello!")
+    var DATA = [
+        15378175,
+        1450800,
+        417497,
+        643742,
+        84379,
+        7893600,
+        277200,
+        553000,
+        2979100,
+        2089975,
+        1035250,
+        18918550,
+        1133950,
+        1271875,
+        3201050,
+        2903457,
+        252281
+    ];
+
+    DATA.sort(function(a, b) {
+        return a - b
+    });
+
+    console.log(DATA);
+
+
+
+    var TARGET_SUM = 277200 + 2089975;
+    var stack = [];
+    var sumInStack = 0;
+
+
+    populateSubset(DATA, 0, DATA.length);
+
+    document.write(stack);
+
+    function populateSubset(data, fromIndex, endIndex) {
+        if (sumInStack === TARGET_SUM) {
+            print(stack);
+        }
+
+        for (var currentIndex = fromIndex; currentIndex < endIndex; currentIndex++) {
+
+            if (sumInStack + data[currentIndex] <= TARGET_SUM) {
+                stack.push(data[currentIndex]);
+                sumInStack += data[currentIndex];
+                populateSubset(data, currentIndex + 1, endIndex);
+                sumInStack -= stack.pop();
+            }
+        }
+    }
+
+
+    function print(stack) {
+        var s = '';
+        s = TARGET_SUM + " = ";
+        console.log(stack);
+        stack.forEach(function(v) {
+            s += (v + " + ");
+        });
+        s = s.trim();
+        console.log(s.slice(0, s.length - 1));
+    }
     </script>
 </body>
 
