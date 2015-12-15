@@ -41,11 +41,13 @@
             </tr>
         </table>
     </div>
+    <div style="margin-left:20px;color:red;" ng-if="results.length===0">NO results found!</div>
     <script type="text/javascript">
     angular.module('app', [])
         .controller('MainCtrl', function($scope) {
-            $scope.results = [];
+            // $scope.results = [];
             $scope.submit = function() {
+                $scope.results = [];
                 $scope.DATA = convert($scope.srcData);
                 $scope.TARGET_SUM = parseInt($scope.srcTarget.replace(/[\$\.,]/g, ''));
                 // $scope.TARGET_SUM = 277200 + 2089975;
