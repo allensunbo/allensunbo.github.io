@@ -38,7 +38,7 @@
     <div class="resultDiv">
         <span style="color:blue;margin-left:20px;">RESULT</span>
         <table class="table">
-            <tr ng-repeat="r in results">
+            <tr ng-repeat="r in results track by $index">
                 <td>{{r}}</td>
             </tr>
         </table>
