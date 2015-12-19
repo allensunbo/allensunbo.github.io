@@ -34,7 +34,7 @@ function solve(data) {
     if (sumInStack === TARGET_SUM) {
       print(stack);
     }
-
+    console.log('processing ' + fromIndex);
     for (var currentIndex = fromIndex; currentIndex < endIndex; currentIndex++) {
 
       if (sumInStack + data[currentIndex] <= TARGET_SUM) {
